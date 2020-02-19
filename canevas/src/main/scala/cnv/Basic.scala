@@ -24,6 +24,10 @@ package object Basic {
     result
   }
 
+  def pathExists(path: String) = {
+    java.nio.file.Files.exists(java.nio.file.Paths.get(path))
+  }
+
   def gzis(fileName: String) = new GZIPInputStream(new BufferedInputStream(new FileInputStream(fileName)))
 
   def getLines(fileName: String) = {
