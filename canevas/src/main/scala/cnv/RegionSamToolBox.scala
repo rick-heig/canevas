@@ -9,7 +9,6 @@ import ExecutionContext.Implicits.global
 
 import java.io.File
 
-import cnv.BasicToolBox._
 import cnv.CommonGenomics._
 import cnv.SamToolBox._
 import cnv.BedSignalToolBox._

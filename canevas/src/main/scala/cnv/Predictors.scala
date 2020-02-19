@@ -9,7 +9,6 @@ import scala.annotation.tailrec
 import scala.concurrent._
 import scala.concurrent.duration._
 import ExecutionContext.Implicits.global
-import cnv.BasicToolBox.Position
 
 object Predictors {
 
