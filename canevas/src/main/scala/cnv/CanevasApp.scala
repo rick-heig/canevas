@@ -4,11 +4,13 @@ import cnv.InputArgs._
 import cnv.Basic.pathExists
 
 object CanevasApp extends App {
-  println("Canevas")
-
   /////////////////////////
   // Input args handling //
   /////////////////////////
+  
+  runCanevasTasks(cnv.Tasks.tasks, args.toList)
+
+  System.exit(0)
 
   val (task, options) = extractOptions(args) match {
     case (EMPTY_MAIN_OPTION , _) => printUsageAndQuit(); (EMPTY_MAIN_OPTION, List())
@@ -29,7 +31,7 @@ object CanevasApp extends App {
   ////////////////////
 
   /** Generate VCFs */
-  def generateVCFs(options: List[Option]) = {
+  def generateVCFs(options: List[OptionT]) = {
     val (pairOptions, singleOptions) = getOptionsSplit(options)
 
     val bamFile = pairOptions.find(_.option == "--input-bamfile") match {
@@ -69,7 +71,7 @@ object CanevasApp extends App {
   }
 
   /** Generate signals */
-  def generateSignals(options: List[Option]) = {
+  def generateSignals(options: List[OptionT]) = {
     val (pairOptions, singleOptions) = getOptionsSplit(options)
 
     val bamFile = pairOptions.find(_.option == "--input-bamfile") match {
@@ -103,7 +105,7 @@ object CanevasApp extends App {
   }
 
   /** Prints the regions inside a bam file */
-  def taskRegions(options: List[Option]) = {
+  def taskRegions(options: List[OptionT]) = {
     // Get the bamfile
     val bamOptions = options filter {
       _ match {
