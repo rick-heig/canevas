@@ -64,21 +64,21 @@ This section gives an overview of the software packages developed for this proje
 
 ### General packages
 
-- Basic
+- **Basic**
 	
   The basic package provides basic interaction with files and general input output. It provides functions to generate a stream that allows to read files line by line from either compressed (gzip) or uncompressed files. It also provides an output stream to write output files either uncompressed or compressed. This makes the handling of input and output files transparent to the developer, the correct processing will be applied based on the file type chosen, e.g., if the user provides a path to a compressed input file, the decompression will be applied to the stream.
 	
   This package also provides a function that allows to count the time used by any portion of code, this should be moved to a benchmarking package but was implemented here because it was a very basic and useful function used throughout developments to profile the time required by the execution of any code block.
 
-- BedSignalToolBox
+- **BedSignalToolBox**
 	
   This provides functions to read (extract information) and write BED and bedgraph format files. It also provides basic algorithms on the BED data such as filtering or extracting data based on given properties, as well as, conversion algorithms to convert BED encoded data to other formats and the other way around.
 	
-- CommonGenomics
+- **CommonGenomics**
 	
   This package provides data structures to hold commonly used genomic data (e.g., loci or regions) and basic algorithms to deal with these data, mostly genomic region related, intersecting, merging, sorting algorithms.
 	
-- RegionSamToolBox & SamToolBox
+- **RegionSamToolBox** & **SamToolBox**
 	
   These two packages provide functions to handle SAM/BAM input files and extract records based on reference location. They also provide filtering capabilities to handle large collections of records.
 	
@@ -87,37 +87,37 @@ This section gives an overview of the software packages developed for this proje
 	
   The two packages rely heavily on the htsjdk library that provides the low-level functions to parse, read, and write files in the SAM/BAM format.
 	
-- VcfToolBox
+- **VcfToolBox**
 	
   The VCF toolbox is collection of utilities to handle VCF files and variants, both reading and writing VCF files as well as providing a data structures to hold VCF entries, generate them, filter and convert them. 
 	
   This package also provides generic transformation algorithms on VCF files such as filtering them given a predicate, this allows for example to quickly generate a new VCF file with only the entries with the "SVTYPE=DEL" parameter or filter VCF files so that only the variants with the "PASS" entry remain. Other functions include re-identifying variants (giving them a new ID) or sorting them by any property (e.g, size).
 	
-- EndToEnd
+- **EndToEnd**
 	
   Implements some end-to-end functionality such as calling variants from input files and generating the final output variant call file.
 	
 ### Prediction and Calling packages
 
-- Predictors
+- **Predictors**
 	
   This package includes functions to help create predictors as well as predictors to predict breakpoints, regions, and variants given the input signals.
 	
-- ImprovedPredictors
+- **ImprovedPredictors**
 	
   The improved predictor package holds more advanced predictors such as insertion predictors, copy number predictors and interchromosomal breakpoint predictors. This package also includes variant calling algorithms. These include deletion, insertion, inversion, and duplication callers.
 	
 ### Assembly packages
 
-- Alignment
+- **Alignment**
 	
   The alignment package provides functions to align sequences such as the Needleman-Wunsch algorithm, helper functions to generate the CIGAR string for alignments, as well as, functions for generating SAM records of aligned sequences. It also provides functions to directly re-assemble and re-align mapped reads from regions of the BAM file and produce alignments for the assembled contigs.
 	
-- Assembly & AssemblyGraph
+- **Assembly** & **AssemblyGraph**
 	
   These two packages provides the functions to create the de Bruijn Graphs from sequencing reads as well as update and prune assembly graphs, they also provide more advanced functions such as generating contigs, paths, possible mapping positions and other properties from the assembly graphs.
 	
-- Graph & GraphG
+- **Graph** & **GraphG**
 	
   This package (GraphG, Graph is the non generic version) contains abstract graph related data structures and algorithms. This package implements graphs in a generic manner. It implements graphs as generic adjacency lists and is based on the same ideas behind the C++ Boost graph library. As with the C++ version with templates this implementation allows for the nodes, edges and other properties to be of any desired type. Every algorithm is generic and will work with any data type. This package allows for example to create graphs were the nodes are integers, k-mers, SAM alignments or any other type. This not only allows to create any graph but also allows for performance optimizations such as creating a graph with a very simple data type such as an integer that serves as an unique identifier and having a table that links that unique identifier to any other property. This allows to apply all graph related algorithms that do not require the extra properties on a very simple graph and achieve good performance results. The choice is left to the user based on the specific needs.
 	
@@ -131,29 +131,29 @@ This section gives an overview of the software packages developed for this proje
 
 ### Visualization packages
 
-- GraphToGephi
+- **GraphToGephi**
 	
   This package allows to send graphs created with the graph package introduced above to the program [Gephi](https://gephi.org/) over the network. This interaction makes it possible to dynamically visualize graphs and display their properties as well as change their layout. Gephi was chosen because it is open source and very effective at displaying graphs of a very high number of nodes and edges. The assembly package also provided some basic functions to export graphs as .dot files which could then be printed with [graphviz](https://www.graphviz.org/), however graphviz does not handle big graphs or dense graphs very well.
 	
-- CheckingVariantsInIGV
+- **CheckingVariantsInIGV**
 	
   This package provides the functionality of reading VCF files or any collection that can be converted to a genomic region and interacting with the user in order to send commands to IGV to display the variants or regions. Functionality includes zoom factor around the event, interactive search for events in a specific region (chromosome), being able to skip events etc.
 	
-- Things
+- **Things**
 	
   This package ought to be renamed but for now handles everything related with the network connection to Gephi and IGV, it provide functions to connect to these programs at the socket level and send data through these sockets.
 
-- Graphml
+- **Graphml**
 	
   Contains a single function to generate a graphml format representation of a DNA sequence from a string in order to generate diagrams with tools such as Dia or Yed.
 
 ### Benchmarking packages
 
-- Basic
+- **Basic**
 	
   The basic package, introduced above, did provide the time related profiling function that can evaluate the time required by any code block execution.
 
-- BenchMarkGraph
+- **BenchMarkGraph**
 	
   This is a benchmarking package that provides tools to evaluate results from this project. It can check reciprocal overlap between variant calls, evaluate the statistics of relationships between variant call files. These functions, given a truth set of variant calls, can extract all the statistics in terms of true/false-positives/negatives. It also provides functions to analyze the distances between calls that may be related in order to quantify the differences between callers.
 	
@@ -199,7 +199,7 @@ Parallelism was implemented using *Futures*. From the Scala documentation, "Futu
 
 *Futures* are complemented by *ExecutionContexts* which will handle the creation of threads, joining, and set the levels of parallelism, changing the *ExecutionContext* allows to adapt the global execution of concurrent code if needed. An more in-depth overview is available from the Scala documentation at :
 
-https://docsscala-lang.org/overviews/core/futures.html}
+https://docsscala-lang.org/overviews/core/futures.html
 
 ## Unit Testing
 
