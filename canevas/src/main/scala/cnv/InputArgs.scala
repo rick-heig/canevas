@@ -4,12 +4,13 @@ import cnv.CanevasApp.printUsageAndQuit
 
 object InputArgs {
 
-  case class MainOption(option: String)
+  case class MainOption(option: String, description: String)
+  val EMPTY_MAIN_OPTION = MainOption("", "")
 
   val mainOptions = Set(
-    MainOption("signal"),
-    MainOption("vcf"),
-    MainOption("regions")
+    MainOption("signal", "Signal extraction and generation"),
+    MainOption("vcf", "VCF generation"),
+    MainOption("regions", "Shows regions from BAM file")
   )
 
   case class OptionEntry(option: String, isPair: Boolean, docString: String, shortOption: String = "")
@@ -77,8 +78,8 @@ object InputArgs {
     }
 
     args.toList match {
-      case head :: tail if (firstOptions.contains(head)) => (MainOption(head), nextOption(List(), tail))
-      case _ => (MainOption(""), List())
+      case head :: tail if (firstOptions.contains(head)) => (MainOption(head, ""), nextOption(List(), tail))
+      case _ => (EMPTY_MAIN_OPTION, List())
     }
   }
 }
