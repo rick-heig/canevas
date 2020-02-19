@@ -198,6 +198,7 @@ object VcfToolBox {
     /** Generates a header for VCF files */
     def generateVcfHeader(sample: String, optLines: List[String] = List()) = {
         // This is a temporary header, it is used for testing purposes
+        // It should not be used in production !
         val header =
         ("""##fileformat=VCFv4.1
         |##fileDate=$$TODAY$$
