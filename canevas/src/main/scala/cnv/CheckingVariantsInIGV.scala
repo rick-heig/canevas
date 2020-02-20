@@ -65,7 +65,7 @@ object CheckingVariantsInIGV {
     goThroughAndAsk(it, 0)
   }
 
-  def genericInteractiveViewSessionFromVcfFile(fileName: String, port: Int = 6666, parameters: Parameters = DEFAULT_PARAMS) = {
+  def genericInteractiveViewSessionFromVcfFile(fileName: String, port: Int = 60151, parameters: Parameters = DEFAULT_PARAMS) = {
     val it = extractEntriesFromFile(fileName)
 
     // Conversion fgrom VcfEntry to Genomic Window
@@ -83,11 +83,11 @@ object CheckingVariantsInIGV {
     genericInteractiveViewSession(it, conv, port, parameters)
   }
 
-  def interactiveViewSession(fileName: String, port: Int = 6666) = {
+  def interactiveViewSession(fileName: String, port: Int = 60151) = {
     genericInteractiveViewSessionFromVcfFile(fileName, port)
   }
 
-  def scaledInteractiveViewSession(fileName: String, port: Int = 6666, scalingFactor: Double) = {
+  def scaledInteractiveViewSession(fileName: String, port: Int = 60151, scalingFactor: Double) = {
     genericInteractiveViewSessionFromVcfFile(fileName, port, Parameters(Some(scalingFactor)))
   }
 
