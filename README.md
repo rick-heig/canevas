@@ -2,7 +2,7 @@
 
 Work in progress...  
 
-This is the source code repository for my Master thesis project on CNV assessment on whole-genome sequencing data. It will serve as a basis for the development of more mature tools.
+This is the source code repository for my Master thesis project on CNV assessment on whole-genome sequencing data. It will serve as a basis for the development of more mature tools. Some of the tools are presented below.
 
 See also : https://github.com/rick-heig/vcfotographer
 
@@ -38,7 +38,7 @@ Command :
 canevas signal extract --input-bamfile, -b <bamfile.bam> --output-dir, -o <output-directory>
 ```
 
-Note : When a single letter argument `-a` is shown after a long `--args` argument it means that it can be used instead of the long argument so `-b` and `--input-bamfile` do the same.
+Note : When a single letter argument `-a` is shown after a long `--argument` argument it means that it can be used instead of the long argument so `-b` and `--input-bamfile` do the same.
 
 ### Generate VCFs from BAM file and signals
 
@@ -148,6 +148,26 @@ res22: scala.collection.immutable.Map[String,Int] = HashMap(X -> 155270560, 12 -
 This is required to play with the more advanced tools such as the assembly related tools.
 
 #### Building the executable
+
+In order to build the executable binary file the following script is provided : `canevas/canevas/generate_executable.sh` runnin the script will build the executable file in the same directory.
+
+This requires `sbt` the scala build tool to be installed and that a java runtime environment is present.
+
+The generated executable file can then be copied in a location that is in the system path e.g., `/usr/local/bin`.
+
+The generated executable can be used locally 
+
+```
+./canevas [args]
+```
+
+or if moved into a directory that is visible in the system path, globally
+
+```
+canevas [args]
+```
+
+##### Build the java executable
 The software executable (Java `.jar` archive) can be built using `sbt` the Scala build tool.
 
 ```
