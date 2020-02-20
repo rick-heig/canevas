@@ -62,6 +62,8 @@ Were a function must be provided to convert the iterator on the collection of ge
 
 The experimental predictors or callers can be called from the console.
 
+There are several in `Predictors.scala` and `ImprovedPredictors.scala`
+
 ### Assembly 
 
 Assembly can be played with through the console.
