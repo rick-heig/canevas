@@ -14,6 +14,8 @@ import scala.concurrent.duration._
 import ExecutionContext.Implicits.global
 
 object Canevas {
+
+  // The constants below are computed from distribution in the improved predictors, this is for the old ones
   // Theses could be computed from mean values e.g., as is done in IGV
   // They definitely should in order to work with different templates/sequencing parameters
   val MIN_INSERT_SIZE = 250

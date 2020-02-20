@@ -8,6 +8,47 @@ object Tasks {
   val outputDirOption = OptionEntry("--output-dir", true, "Defines the output directory", "-o")
   val regionOption = OptionEntry("--region", true, "Defines a region of the reference", "-r")
   val signalDirOption = OptionEntry("--signal-dir", true, "Path to the Signal directory")
+  val truthVCFOption = OptionEntry("--truth-vcf", true, "Path to the truth set VCF", "-t")
+  val candidateVCFOption = OptionEntry("--candidate-vcf", true, "Path to the candidate set VCF", "-c")
+  val svTypeOption = OptionEntry("--sv-type", true, "SV type to be included", "-s")
+  val generateDiffVCFs = OptionEntry("--generate-sub-vcfs", false, "Generates found, missed, false vcf sets", "")
+  val vcfFileOption = OptionEntry("--vcf-file", true, "The VCF file in which to replace the IDs", "-fi")
+  val vcfFileOutOption = OptionEntry("--vcf-file-out", true, "The output VCF file with new IDs", "-fo")
+  val idPrefixOption = OptionEntry("--prefix", true, "Prefix to be appended to the ID (ID is a number)", "-p")
+
+  // Tasks can be defined this way and added to the tasks list below
+  val vcfReIdTask =
+    Task (
+      name = "re-identify",
+      description = "Replaces the IDs in a VCF file",
+      requiredOptions = Set(vcfFileOption, vcfFileOutOption),
+      optionalOptions = Set(idPrefixOption),
+      function = cnv.CanevasApp.reIdTask
+    )
+
+  // Not yet ready
+  val vcfCompareTask = 
+    Task(
+      name = "compare",
+      description = "Compares a candidate VCF to a truth set VCF",
+      requiredOptions = Set(truthVCFOption, candidateVCFOption),
+      optionalOptions = Set(svTypeOption, regionOption, generateDiffVCFs),
+      function = (_) => println("In development")
+    )
+
+  // Not yet ready
+  val predictLowCoverageTask =
+    Task(
+      name = "predict-low-coverage",
+      description = "Predicts low coverage regions",
+      requiredOptions = Set(signalDirOption, outputDirOption),
+      optionalOptions = Set(regionOption),
+      function = (_) => println("In development")
+    )
+
+  /////////////////////////////////////////////////////////////////////////
+  // Tasks in the list below will appears as option in the software menu //
+  /////////////////////////////////////////////////////////////////////////
 
   /** This defines the main software tasks */
   val tasks: List[TaskT] = List(
@@ -41,7 +82,8 @@ object Tasks {
           requiredOptions = Set(bamFileOption, outputDirOption, signalDirOption),
           optionalOptions = Set(regionOption),
           function = cnv.CanevasApp.generateVCFs
-        )
+        ),
+        vcfReIdTask
       )
     ),
     Task(

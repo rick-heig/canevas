@@ -3,6 +3,10 @@ package cnv
 import cnv.InputArgs._
 import cnv.Basic.pathExists
 
+import scala.concurrent._
+import scala.concurrent.duration._
+import ExecutionContext.Implicits.global
+
 object CanevasApp extends App {
   /////////////////////////
   // Input args handling //
@@ -37,7 +41,7 @@ object CanevasApp extends App {
       case None => println("Missing output dir !"); printUsageAndQuit(); ""
     }
 
-    val regions = pairOptions filter {_.option == "--region"} map {_.value}
+    val regions = checkRegions(bamFile, pairOptions filter {_.option == "--region"} map {_.value})
 
     regions match {
         case List() => {
@@ -46,10 +50,14 @@ object CanevasApp extends App {
         }
         case _ => {
           // Per region
-          regions foreach {
-            println("Start generating VCFs for select regions...")
-            region => throw new Exception("TODO ! Not yet implemented")
-          }
+          println("Start generating VCFs for select regions...")
+          regions map {
+            region => Future{
+              cnv.Canevas.niceVcfGenerators(30) foreach {
+                gen => gen.fun(bamFile, signalDir, region, outputDir)
+              }
+            }
+          } foreach {Await.result(_, Duration.Inf)}
         }
       }
     println(s"Done generating VCFs, files are available in $outputDir")
@@ -71,7 +79,7 @@ object CanevasApp extends App {
       case None => println("Missing output dir !"); printUsageAndQuit(); ""
     }
 
-    val regions = pairOptions filter {_.option == "--region"} map {_.value}
+    val regions = checkRegions(bamFile, pairOptions filter {_.option == "--region"} map {_.value})
 
     regions match {
       case List() => {
@@ -118,9 +126,39 @@ object CanevasApp extends App {
     }
   }
 
+  def reIdTask(options: List[OptionT]) = {
+    val (pairOptions, singleOptions) = getOptionsSplit(options)
+
+    val vcfFile = pairOptions.find(_.option == "--vcf-file") match {
+      case Some(value) if (pathExists(value.value)) => value.value
+      case Some(_) => println("VCF file not found !"); quit(); ""
+      case None => println("Missing VCF file !"); printUsageAndQuit(); ""
+    }
+
+    val outVcfFile = pairOptions.find(_.option == "--vcf-file-out").get.value
+
+    val idPrefix = pairOptions.find(_.option == "--prefix") match {
+      case Some(value) => value.value
+      case None => ""
+    }
+
+    println(s"File $vcfFile ID fields will be updated as $idPrefix N in file $outVcfFile")
+    cnv.VcfToolBox.reIdVcfFile(vcfFile, outVcfFile, idPrefix)
+  }
+
   //////////////////////
   // Helper functions //
   //////////////////////
+
+  def checkRegions(bamFile: String, regions: List[String]) = {
+    val availableRegions = (cnv.SamToolBox.getRegions(bamFile) map {_._1}).toSet
+    val unknownRegions = regions.toSet -- availableRegions
+    if (!unknownRegions.isEmpty) {
+      println("Regions [" + unknownRegions.mkString(",") + "] are not available for analysis")
+      println("Possible regions are [" + availableRegions.mkString(",") + "]")
+    }
+    regions.toSet -- unknownRegions
+  }
 
   def quit() = {
     System.exit(1)

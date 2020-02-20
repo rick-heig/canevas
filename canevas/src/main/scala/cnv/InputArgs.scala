@@ -28,14 +28,18 @@ object InputArgs {
     }
   }
 
-  // These are the options accepted by the program
-  val options = Set(
-    OptionEntry("--help", false, "Prints help", "-h"),
-    regionOption,
-    bamFileOption,
-    outputDirOption,
-    signalDirOption
-  )
+  // These are the options accepted by the program (extract from the above)
+  val options = cnv.Tasks.tasks.foldLeft(Set(): Set[OptionEntry])((set, task) => {
+    def extractOptions(task: TaskT): Set[OptionEntry] = {
+      task match {
+        case Task(_, _, requiredOptions, optionalOptions, _) => requiredOptions.toSet ++ optionalOptions.toSet ++ set
+        case TaskWithSubTasks(_, _, subTasks) => set ++ subTasks.foldLeft(Set(): Set[OptionEntry])((set, task) => {
+          set ++ extractOptions(task)
+        })
+      }
+    }
+    set ++ extractOptions(task)
+  })
 
   // Short to long option conversion map
   val shortOptionsToLong = Map((options filter {_.shortOption != ""} map {o => (o.shortOption, o.option)}).toSeq: _*)
