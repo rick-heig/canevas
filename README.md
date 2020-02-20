@@ -58,7 +58,7 @@ canevas vcf generate -b <bamfile.bam> -o <output-directory> --signal-dir <signal
 
 ### More advanced tools
 
-More advanced tools will be discussed in ...
+More advanced tools will be discussed in [Experimental-tools](canevas/doc/ExperimentalTools.md)
 
 This also allows to run other VCF generators or region predictors not yet integrated in the main software argument options.
 
@@ -176,7 +176,7 @@ res22: scala.collection.immutable.Map[String,Int] = HashMap(X -> 155270560, 12 -
 
 This is required to play with the more advanced tools such as the assembly related tools.
 
-##### Building the java executable
+#### Building the java executable
 An alternative to building the standalone executable above is to build the java executable :
 
 The software executable (Java `.jar` archive) can be built using `sbt` the Scala build tool.
