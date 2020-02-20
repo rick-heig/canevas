@@ -45,6 +45,6 @@ RUN mkdir -p /usr/src/ && \
 # Work in this temporary directory
 WORKDIR /tmp/work
 
-CMD canevas
+CMD echo "Run with the following command : docker run rwk/canevas canevas [args]"
 
 # Possible run command :
