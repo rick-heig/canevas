@@ -101,6 +101,35 @@ The `--user $(id -u):$/$(id -g)` option will with the same user and group ids in
 
 The `-v <host_directory>:<container_directory>` options mount the host directories inside the docker container. The first mount has the `:ro` attribute to mark it as read only, to make sure that nothing in this mounted directory can be overwritten. The second volume mounted is writable, therefore it's best to mount an empty directory from the host so that nothing of importance gets overwritten. If a directory with previously generated outputs is mounted they will be overwritten if the same operation is performed again.
 
+### Executable Build
+
+If one prefers running the executable directly on the host system without Docker it is possible to build the executable as shown below.
+
+#### Building the executable
+
+In order to build the executable binary file the following script is provided : `canevas/canevas/generate_executable.sh` runnin the script will build the executable file in the same directory.
+
+```
+cd canevas/canevas
+./generate_executable.sh
+```
+
+This requires `sbt` the scala build tool to be installed and that a java runtime environment is present.
+
+The generated executable file can then be copied in a location that is in the system path e.g., `/usr/local/bin`.
+
+The generated executable can be used locally 
+
+```
+./canevas [args]
+```
+
+or if moved into a directory that is visible in the system path, globally
+
+```
+canevas [args]
+```
+
 ### Development Build
 
 The development sources are in the `canevas/canevas` directory.
@@ -146,26 +175,6 @@ res22: scala.collection.immutable.Map[String,Int] = HashMap(X -> 155270560, 12 -
 ```
 
 This is required to play with the more advanced tools such as the assembly related tools.
-
-#### Building the executable
-
-In order to build the executable binary file the following script is provided : `canevas/canevas/generate_executable.sh` runnin the script will build the executable file in the same directory.
-
-This requires `sbt` the scala build tool to be installed and that a java runtime environment is present.
-
-The generated executable file can then be copied in a location that is in the system path e.g., `/usr/local/bin`.
-
-The generated executable can be used locally 
-
-```
-./canevas [args]
-```
-
-or if moved into a directory that is visible in the system path, globally
-
-```
-canevas [args]
-```
 
 ##### Building the java executable
 An alternative to building the standalone executable above is to build the java executable :
