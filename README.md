@@ -167,7 +167,9 @@ or if moved into a directory that is visible in the system path, globally
 canevas [args]
 ```
 
-##### Build the java executable
+##### Building the java executable
+An alternative to building the standalone executable above is to build the java executable :
+
 The software executable (Java `.jar` archive) can be built using `sbt` the Scala build tool.
 
 ```
