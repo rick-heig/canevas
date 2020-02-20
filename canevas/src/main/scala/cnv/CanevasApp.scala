@@ -9,22 +9,7 @@ object CanevasApp extends App {
   /////////////////////////
   
   runCanevasTasks(cnv.Tasks.tasks, args.toList)
-
   System.exit(0)
-
-  val (task, options) = extractOptions(args) match {
-    case (EMPTY_MAIN_OPTION , _) => printUsageAndQuit(); (EMPTY_MAIN_OPTION, List())
-    case (_, List()) => quit(); (EMPTY_MAIN_OPTION, List())
-    case opts => opts
-  }
-
-  task match {
-    case MainOption("signal", _) => generateSignals(options)
-    case MainOption("vcf", _) => generateVCFs(options)
-    case MainOption("regions", _) => taskRegions(options)
-    case _ => printUsageAndQuit()
-  }
-
 
   ////////////////////
   // Main functions //
