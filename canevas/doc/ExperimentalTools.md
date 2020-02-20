@@ -58,6 +58,33 @@ scala> cnv.CheckingVariantsInIGV.genericInteractiveViewSession(it: Iterator[T], 
 
 Were a function must be provided to convert the iterator on the collection of generic type `T` to `cnv.CommonGenomics.GenomicWindow`. This is helpful for developers that want to check a collection of e.g., variants, bed entries, loci, etc. interactively through IGV, the only requirement is a conversion function which can be given inline in the call.
 
+### Comparing VCF files
+
+VCF files can be compared with the function available in `cnv.BenchMarkGraph.compareTwoVcfs`. This function does not care of the type of call in the VCF so we only want to compare for example "SVTYPE=DEL" entries, the VCF files should be filtered first.
+
+```Scala
+scala> import cnv.BenchMarkGraph._
+scala> compareTwoVcfs("path/to/truth/set/VCF.vcf", "path/to/candidate/VCF.vcf", "region", ComparisonParameters(extractIntervalFromPosAndSVLEN, extractIntervalFromPosAndEND, defaultAcceptance))
+```
+
+This will give the results in number of true events (all truth set), true positives (both sets), false negatives (only in truth set), false positives (only  in candidate set).
+
+Specific comparison parameters ares passed through the last argument to the function which is of type `ComparisonParameters`.
+
+```Scala
+case class ComparisonParameters(
+  getBoundariesFromTruthEntry: (VcfEntry) => Interval,
+  getBoundariesFromCandidateEntry: (VcfEntry) => Interval,
+  acceptanceFunction: (Interval, Interval) => Boolean = defaultAcceptance,
+  generateFiles: Boolean = false)
+```
+
+This allows to specify functions to get the boundaries of the entry (some VCF use position + SVLEN, others use position + END, sometimes both). For deletions and inversions this does not really matter, however for insertions the insertion site may be very narrow (position + END) but the SVLEN may represent the length of the inserted sequence.
+
+The acceptance function takes two intervals (given by the functions above) and returns a boolean if they are similar enough (by default based on reciprocal overlap)
+
+The last option allows to generate the "found" "missed" "false" VCF callsets, which are the true positives, false negatives, and false positives calls respectively.
+
 ### Predictors
 
 The experimental predictors or callers can be called from the console.
