@@ -134,7 +134,7 @@ object InputArgs {
     val missingOptions = requiredOptionStrings -- (options map {_.option}).toSet
 
     if (!missingOptions.isEmpty) {
-      println("The following options are missing : " + missingOptions.mkString(" "))
+      println("The following options are missing : " + missingOptions.mkString(" ") + "\n")
       None
     } else {
       Some(options)

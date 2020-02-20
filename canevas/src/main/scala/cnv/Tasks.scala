@@ -24,7 +24,7 @@ object Tasks {
       subTasks = List(
         Task(
           name = "extract",
-          description = "",
+          description = "Extracts signals from a bamfile",
           requiredOptions = Set(bamFileOption, outputDirOption),
           optionalOptions = Set(regionOption),
           function = cnv.CanevasApp.generateSignals
@@ -37,7 +37,7 @@ object Tasks {
       subTasks = List(
         Task(
           name = "generate",
-          description = "",
+          description = "Generates VCFs from signals",
           requiredOptions = Set(bamFileOption, outputDirOption, signalDirOption),
           optionalOptions = Set(regionOption),
           function = cnv.CanevasApp.generateVCFs
@@ -80,7 +80,7 @@ object Tasks {
   def taskToDocString(task: Task) = {
     task match {
       case Task(name, description, requiredOptions, optionalOptions, _) => {
-        name + "\t" + description + "\n" +
+        name + " " * (40-name.size) + description + "\n" +
         "Required arguments : \n" + 
         requiredOptions.map(OptionEntry.toString(_)).mkString("\n") +
         (if (!optionalOptions.isEmpty) {
