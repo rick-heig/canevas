@@ -41,7 +41,7 @@ object CanevasApp extends App {
       case None => println("Missing output dir !"); printUsageAndQuit(); ""
     }
 
-    val regions = checkRegions(bamFile, pairOptions filter {_.option == "--region"} map {_.value})
+    val regions = (checkRegions(bamFile, pairOptions filter {_.option == "--region"} map {_.value})).toList
 
     regions match {
         case List() => {
@@ -79,7 +79,7 @@ object CanevasApp extends App {
       case None => println("Missing output dir !"); printUsageAndQuit(); ""
     }
 
-    val regions = checkRegions(bamFile, pairOptions filter {_.option == "--region"} map {_.value})
+    val regions = (checkRegions(bamFile, pairOptions filter {_.option == "--region"} map {_.value})).toList
 
     regions match {
       case List() => {
