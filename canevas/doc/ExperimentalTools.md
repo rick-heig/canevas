@@ -85,12 +85,6 @@ The acceptance function takes two intervals (given by the functions above) and r
 
 The last option allows to generate the "found" "missed" "false" VCF callsets, which are the true positives, false negatives, and false positives calls respectively.
 
-### Predictors
-
-The experimental predictors or callers can be called from the console.
-
-There are several in `Predictors.scala` and `ImprovedPredictors.scala`
-
 ### VCF File related
 
 #### Filter VCF File
@@ -106,6 +100,27 @@ Example (get only deletions)
 ```Scala
 cnv.VcfToolBox.filterVcfFile("path/to/input/file.vcf", "path/to/output/file.vcf", (line: String) => line.contains("SVTYPE=DEL"))
 ```
+#### Re-Identify VCF File
+
+The following function
+
+```Scala
+cnv.VcfToolBox.reIdVcfFile(vcfInputFile: String, vcfOutpuFile: String, optionalPrefix: String)
+```
+
+allows to create a new VCF file based on the input file with the ID column updated in numerical order with an optional prefix. For example
+
+```Scala
+cnv.VcfToolBox.reIdVcfFile("path/to/input/file.vcf", "path/to/output/file.vcf", "CNV-")
+```
+
+Will set the IDs in the new file to CNV-0, CNV-1, ...
+
+### Predictors
+
+The experimental predictors or callers can be called from the console.
+
+There are several in `Predictors.scala` and `ImprovedPredictors.scala`
 
 ### Assembly 
 
