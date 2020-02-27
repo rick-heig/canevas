@@ -91,6 +91,22 @@ The experimental predictors or callers can be called from the console.
 
 There are several in `Predictors.scala` and `ImprovedPredictors.scala`
 
+### VCF File related
+
+#### Filter VCF File
+
+It is possible to filter a VCF file on any predicate with the following function
+
+```Scala
+cnv.VcfToolBox.filterVcfFile(vcfInputFile: String, vcfOutputFile: String, line: String => filter)
+```
+
+Example (get only deletions)
+
+```Scala
+cnv.VcfToolBox.filterVcfFile("path/to/input/file.vcf", "path/to/output/file.vcf", (line: String) => line.contains("SVTYPE=DEL"))
+```
+
 ### Assembly 
 
 Assembly can be played with through the console.
