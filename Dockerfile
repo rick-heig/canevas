@@ -36,7 +36,7 @@ RUN mkdir -p /usr/src/ && \
     sbt assembly && \
     cp target/scala*/Canevas*.jar /usr/local/ && \
     echo '#!/bin/bash' > canevas && \
-    echo 'java -jar /usr/local/Canevas*.jar "$@"' >> canevas && \
+    echo 'java -Xmx8G -jar /usr/local/Canevas*.jar "$@"' >> canevas && \
     chmod +x canevas && \
     cp canevas /usr/local/bin/ && \
     cd /usr/src/ && \
