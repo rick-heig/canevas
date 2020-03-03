@@ -270,7 +270,7 @@ object BenchMarkGraph {
         //val delStats = compareTwoDelVcfsSimA(referenceVCFDir + "/Sim-A2.DEL.vcf", vcfDirectory + "/" + region + "_deletions_fine.vcf", "chr" + region)._1
         //val dupStats = compareTwoDelVcfsSimA(referenceVCFDir + "/Sim-A2.DUP.vcf", vcfDirectory + "/" + region + "_test_cnv_fine.vcf", "chr" + region)._1
         //val invStats = compareTwoDelVcfsSimA(referenceVCFDir + "/Sim-A2.INV.vcf", vcfDirectory + "/" + region + "_inversions_fine.vcf", "chr" + region)._1
-        val parameters = ComparisonParameters(extractIntervalFromPosAndSVLEN, extractIntervalFromPosAndEND, generateFiles = false)
+        val parameters = ComparisonParameters(extractIntervalFromPosAndSVLEN, extractIntervalFromPosAndEND, /*laxAcceptance, */ generateFiles = false)
         val delStats = compareTwoVcfs(referenceVCFDir + "/Sim-A2.DEL.vcf", vcfDirectory + "/" + region + "_deletions_fine.vcf", "chr" + region, parameters)
         val dupStats = compareTwoVcfs(referenceVCFDir + "/Sim-A2.DUP.vcf", vcfDirectory + "/" + region + "_test_cnv_fine.vcf", "chr" + region, parameters)
         val invStats = compareTwoVcfs(referenceVCFDir + "/Sim-A2.INV.vcf", vcfDirectory + "/" + region + "_inversions_fine.vcf", "chr" + region, parameters)        
@@ -385,15 +385,19 @@ object BenchMarkGraph {
     getBoundariesFromTruthEntry: (VcfEntry) => Interval,
     getBoundariesFromCandidateEntry: (VcfEntry) => Interval,
     acceptanceFunction: (Interval, Interval) => Boolean = defaultAcceptance,
-    generateFiles: Boolean = false
+    generateFiles: Boolean = false,
+    svType: String = ""
   )
   def compareTwoVcfs(truthSetFile: String, candidateSetFile: String, region: String, parameters: ComparisonParameters) = {
 
-    // Extract the entries from the VCF with their lines of origin
-    val truthSet = (cnv.Basic.getLines(truthSetFile) filterNot {_.startsWith("#")} map {line => VcfEntryWithLineOfOrigin(extractEntry(line), line)}).toList filter {_.entry.chr == region}
-    val candidateSet = (cnv.Basic.getLines(candidateSetFile) filterNot {_.startsWith("#")} map {line => VcfEntryWithLineOfOrigin(extractEntry(line), line)}).toList filter {_.entry.chr == region}
+    val filterRegion = region.replace("chrchr", "chr")
 
-    if (truthSet.length == 0 || candidateSet.length == 0) println("Warning check region, one of the sets is empty")
+    // Extract the entries from the VCF with their lines of origin
+    val truthSet = (cnv.Basic.getLines(truthSetFile) filterNot {_.startsWith("#")} filter {_.contains(parameters.svType)} map {line => VcfEntryWithLineOfOrigin(extractEntry(line), line)}).toList filter {_.entry.chr == filterRegion}
+    val candidateSet = (cnv.Basic.getLines(candidateSetFile) filterNot {_.startsWith("#")} filter {_.contains(parameters.svType)} map {line => VcfEntryWithLineOfOrigin(extractEntry(line), line)}).toList filter {_.entry.chr == filterRegion}
+
+    if (truthSet.length == 0) println("Warning check region, truth set seems empty")
+    if (candidateSet.length == 0) println("Warning check region, candidate set seems empty")
 
     // Sort the candidate entries by their position for quick look-up
     val candidateEntriesStartMap = scala.collection.immutable.SortedMap(candidateSet map {e => (e.entry.pos, e)}: _*)
