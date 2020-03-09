@@ -86,7 +86,7 @@ object Canevas {
   // This generates predictors that have been tuned a bit more, at least some more processing is done to filter and determine the type of SV
   def niceVcfGenerators(coverage: Int) = List(
     // Deletions - Nice
-    VCFGenerator((inBamFile: String, signalDirectory: String, region: String, directory: String) => cnv.ImprovedPredictors.predictDeletionsFromInsertSizesFine(signalDirectory, inBamFile, directory, region, cnv.ImprovedPredictors.PRED_DEL_INS_SIZE_BIG_FINE_DEFAULT_PARAMS.copy(coverage = coverage))),
+    VCFGenerator((inBamFile: String, signalDirectory: String, region: String, directory: String) => cnv.ImprovedPredictors.predictDeletionsFromInsertSizesFine(signalDirectory, inBamFile, directory, region, cnv.ImprovedPredictors.PRED_DEL_INS_SIZE_BIG_FINE_DEFAULT_PARAMS.copy(coverage = coverage, threshold = 6))),
     // Duplications - Nice
     VCFGenerator((inBamFile: String, signalDirectory: String, region: String, directory: String) => cnv.ImprovedPredictors.predictCopyNumberNew(inBamFile, signalDirectory, directory, coverage, region)),
     // Inversions - Nice
